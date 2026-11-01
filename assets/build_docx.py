@@ -408,6 +408,12 @@ def add_code_block(doc, lines: list[str]):
 def add_image(doc, path: Path, caption: str, width_cm: float):
     if not path.exists():
         raise FileNotFoundError(path)
+    # 依圖片比例限制最大高度，避免接近正方形的圖佔滿整頁
+    with Image.open(path) as im:
+        aspect = im.size[0] / im.size[1]
+    max_h_cm = 11.0
+    if width_cm / aspect > max_h_cm:
+        width_cm = max_h_cm * aspect
     p = doc.add_paragraph()
     p.alignment = WD_ALIGN_PARAGRAPH.CENTER
     p.paragraph_format.space_before = Pt(6)
@@ -453,6 +459,17 @@ def table_widths(n: int, total: float) -> list[float]:
     }.get(n, [1.0] * n)
     s = sum(weights)
     return [total * w / s for w in weights]
+
+
+def add_table_caption(doc, text: str):
+    p = doc.add_paragraph()
+    p.paragraph_format.space_before = Pt(9)
+    p.paragraph_format.space_after = Pt(2)
+    p.paragraph_format.line_spacing = 1.0
+    p.paragraph_format.keep_with_next = True
+    p.alignment = WD_ALIGN_PARAGRAPH.LEFT
+    r = p.add_run(text)
+    set_run_font(r, 8.8, bold=True, color=PINE)
 
 
 def add_table(doc, rows: list[list[str]], landscape=False, section_width=16.6):
@@ -779,6 +796,7 @@ def build():
     i = 0
     first_h1 = True  # heading itself handles page break
     in_abstract = False
+    pending_caption = None
     while i < len(lines):
         line = lines[i]
         stripped = line.strip()
@@ -805,6 +823,14 @@ def build():
 
         if stripped == "<!-- PAGEBREAK -->":
             doc.add_page_break()
+            i += 1
+            continue
+
+        if stripped.startswith("<!-- TABLE"):
+            cap = stripped[len("<!-- TABLE"):]
+            if cap.endswith("-->"):
+                cap = cap[:-3]
+            pending_caption = cap.strip()
             i += 1
             continue
 
@@ -869,6 +895,9 @@ def build():
             cur_sec = doc.sections[-1]
             landscape = cur_sec.orientation == WD_ORIENT.LANDSCAPE
             width = body_width(cur_sec) - (0.3 if landscape else 0.0)
+            if pending_caption:
+                add_table_caption(doc, pending_caption)
+                pending_caption = None
             add_table(doc, rows, landscape=landscape, section_width=width)
             continue
 

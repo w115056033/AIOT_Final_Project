@@ -70,7 +70,7 @@
 
 | 檔案 | 說明 |
 |---|---|
-| `Proposal_Document.docx` | 提案文件交付版（41 頁）：Abstract、Introduction、Related Work、Deep Research、Proposed Scheme、References、附錄 |
+| `Proposal_Document.docx` | 提案文件交付版（42 頁）：Abstract、Introduction、Related Work、Deep Research、Proposed Scheme、References、附錄 |
 | `Proposal_Document.md` | 提案文件可編輯來源（DOCX 由 `assets/build_docx.py` 產生） |
 | `Proposal_PPT.pptx` | 提案簡報（35 頁、16:9、全頁講者備註） |
 | `DESIGN.md` | 系統設計與交接文件：問題 → 需求 → 架構 → 元件 → 資料 → AI/分析 → 領域知識 → 演算法 → 實作 → 執行 → 結果 |
@@ -127,7 +127,7 @@ pip install python-docx python-pptx matplotlib pymupdf pillow
 # 1) 產生圖表
 python assets/build_figures.py
 
-# 2) 產生 DOCX（41 頁）
+# 2) 產生 DOCX（42 頁）
 python assets/build_docx.py
 
 # 3) 產生 PPTX（35 頁）
