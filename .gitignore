@@ -1,0 +1,27 @@
+# ---- 衍生檔 / 產出 ----
+*.pdf
+assets/qa/
+assets/toc_pages.json.bak
+
+# ---- Python ----
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.ipynb_checkpoints/
+
+# ---- Office 暫存 ----
+~$*.docx
+~$*.pptx
+~$*.xlsx
+*.tmp
+
+# ---- 環境與密鑰 ----
+.env
+.env.*
+!.env.example
+
+# ---- 作業系統 ----
+Thumbs.db
+Desktop.ini
+.DS_Store
