@@ -20,27 +20,27 @@
 
 # 摘要
 
-## A. Attention Getter — Motivation
+## A. Attention Getter — Motivation：3,450 件山域事故的警訊
 
 臺灣高山活動在 2019 年「開放山林」後快速成長，但風險並沒有隨之下降。內政部統計 2015 至 2024 年間共發生 3,450 件山域事故，其中「迷路」1,263 件、約占 37%，是最大宗；政府雖已建置 602 面可通話地點標示，仍難以消除高山通訊死角與資訊落差 [1]。國家公園署進一步指出，2025 年玉山、太魯閣、雪霸三座高山型國家公園約有 15.2 萬人次入園，平均每萬人發生 9 件事故；事故原因以創傷（31.2%）最高，其次為高山症與墜谷（各 15.6%）、迷路（12.8%）、疲勞（6.4%）與疾病（5.8%）。更值得警惕的是，山域事故發生率由 2016–2019 年的 0.04–0.05%，上升到 2023–2025 年的 0.08–0.09% [2]。這些數字說明：問題不只是「有沒有山難」，而是**行前決策與風險資訊沒有被有效整合**。
 
-## B. But — Challenge
+## B. But — Challenge：資訊分散，決策卻不能分散
 
 既有工具各自解決片段問題：一站式服務網提供入園申請與路線資訊，氣象署提供天氣預報，社群與 GPX 平台提供路況與軌跡，上河文化等地圖提供步程參考。然而，新手自組隊仍必須在多個網站、PDF、社群貼文與個人經驗之間自行拼湊，才能回答「這條路線適合我們嗎？」「午後雷雨會卡在哪一段？」「同行者高山症風險多高？」「幾點前沒到撤退點就該回頭？」。大型語言模型（LLM）雖然能生成看似完整的行程，卻可能忽略硬性限制、混淆資料時效，甚至給出「看起來安全」但沒有來源支撐的建議。TravelPlanner 的結果即顯示，即使是 GPT-4，在多重約束的真實行程規劃上成功率也只有 0.6% [10]。**因此，真正的缺口不是再做一個聊天機器人，而是建立一個能把領域知識、即時資料、數值分析與安全責任分開處理的決策支援系統。**
 
-## C. Cure — Proposed Solution
+## C. Cure — Proposed Solution：提出 TrailGuard TW 代理人
 
 為了解決上述問題，本專題提出 **TrailGuard TW（山徑守護者）**：一個以證據為基礎（evidence-grounded）的臺灣高山行程規劃與風險決策支援代理人。它服務新手與半經驗自組隊，主要輸出不是一段華麗文字，而是**可追溯、可驗證、可行動**的行前決策包：三個候選行程（安全／平衡／進取）、逐段風險儀表板、撤退點與回頭時間、裝備與水源檢查表、離線緊急卡，以及每一項數字的來源與時間戳。
 
-## D. Development — Method
+## D. Development — Method：LLM 理解，引擎計算與舉證
 
 系統採「LLM 負責理解、規劃與解釋；Analytics Engine 負責計算、驗證與提供證據」的分工。LLM 透過狀態機與工具呼叫完成意圖解析、缺槽追問、任務拆解與說明生成；Python 分析引擎負責步程估計、天氣窗格、高山症風險篩檢、路線風險分解與行程最佳化；領域知識層則以**時序知識圖譜（Temporal Knowledge Graph）＋混合式檢索增強生成（Hybrid RAG）**整合官方規範、步道分級、山屋與水源、事故統計、醫學指引與社群回報。所有數值與規則都必須寫入 **Evidence Ledger**，沒有來源就沒有數字（No source, no number）。系統另設**硬性紅旗覆寫**（hard red-flag override）：颱風警報、步道封閉、嚴重高山症症狀等情況，直接輸出 NO-GO 或升級人工，不允許被平均分數抵銷。
 
-## E. Experiments — Evaluation
+## E. Experiments — Evaluation：120 案例、五組對照
 
 本提案規劃 120 個評估案例：30 條臺灣高山路線 × 3 種人物誌（新手、半經驗、資深領隊）共 90 個核心情境，加上 30 個壓力與對抗案例（資料衝突、缺資料、幻覺誘導、錯誤體能自述、突發封閉）。對照組包含 GPT-4o zero-shot、GPT-4o＋網路搜尋、RAG-only、人工流程，以及移除知識圖譜、移除驗證層、移除紅旗層等消融版本。主要指標為限制滿足率（CSR）、證據覆蓋率（EGR）、**錯誤安全率（False-Safe Rate, FSR）**、步程誤差（MAE）、專家可接受度、系統使用性量表（SUS）、延遲與成本。目標值分別為 CSR ≥ 85%、EGR ≥ 95%、FSR ≤ 2%、步程 MAE ≤ 20%、SUS ≥ 75；所有數字均為驗收門檻，將以信賴區間與統計檢定報告。
 
-## F. Findings — Expected Outcomes
+## F. Findings — Expected Outcomes：可追溯的行前決策包
 
 預期完成一個可操作的 Web 原型、一套可重現的評估協定、一份 Evidence Ledger 與 Temporal KG 設計，以及一組能區分「真安全」與「假安全」的測試案例。若目標達成，本專題的貢獻不只是做出一個登山助手，而是示範一種可移植的領域代理人範式：**把不確定性、時效性與安全責任，設計進 AI Agent 的架構，而不是事後補救。**
 
@@ -873,68 +873,6 @@ Output: Decision d, violations V, evidence trace T
 [21] Ivanova, I. A., & Wald, M. (2023). Recommender Systems for Outdoor Adventure Tourism Sports: Hiking, Running and Climbing. Human-Centric Intelligent Systems, 3, 230–246. https://doi.org/10.1007/s44230-023-00033-3
 
 [22] Ni, H., Liu, F., Ma, X., et al. (2025). TP-RAG: Benchmarking Retrieval-Augmented Large Language Model Agents for Spatiotemporal-Aware Travel Planning. In Proceedings of EMNLP 2025. https://doi.org/10.18653/v1/2025.emnlp-main.626
-
----
-
-# 附錄 A、資料字典（節錄）
-
-<!-- TABLE 表 14　路線分段資料字典（節錄） -->
-
-| 欄位 | 型別 | 說明 | 示例 |
-|---|---|---|---|
-| route_id | UUID | 路線唯一識別碼 | `route_yushan_main` |
-| segment_id | UUID | 分段識別碼 | `seg_yushan_02` |
-| distance_km | float | 分段距離 | 2.4 |
-| ascent_m | int | 分段累計上升 | 420 |
-| descent_m | int | 分段累計下降 | 80 |
-| terrain_class | enum | 地形類別 | rock／forest／ridge／river |
-| exposure_level | enum | 暴露程度 | low／medium／high |
-| water_reliability | enum | 水源可靠度 | reliable／seasonal／none |
-| comms_quality | enum | 通訊品質 | good／weak／none |
-| valid_from | date | 資料有效起日 | 2027-04-01 |
-| valid_to | date | 資料有效迄日 | 2027-04-30 |
-| source_id | UUID | 來源識別碼 | `src_cwa_fd0047` |
-| confidence | float | 信心等級 0–1 | 0.92 |
-
-# 附錄 B、工具與輸出 Schema（節錄）
-
-```json
-{
-  "tool": "estimate_hiking_time",
-  "input": {
-    "segments": [
-      {"distance_km": 2.4, "ascent_m": 420, "descent_m": 80, "terrain": "rock"}
-    ],
-    "profile": {"fitness_level": "novice", "load_kg": 10},
-    "weather": {"precip_prob": 0.35, "wind_mps": 8}
-  },
-  "output": {
-    "p50_min": 118,
-    "p90_min": 147,
-    "method": "tobler_v1+personal_correction",
-    "evidence_ids": ["ev_route_001", "ev_weather_014"],
-    "assumptions": ["rest 10 min per hour", "fitness self-reported"]
-  }
-}
-```
-
-# 附錄 C、提案自檢表
-
-<!-- TABLE 表 15　規範條目與本文件對應位置 -->
-
-| 規範要求 | 本文件對應 | 狀態 |
-|---|---|---|
-| Abstract A–F | 摘要 A–F 六段 | 完成 |
-| Introduction A–F | 壹、A–F | 完成 |
-| Related Work＋Article Summary Table | 貳、A–D＋表 1 | 完成 |
-| Deep Research 5 mindsets | 參、A | 完成 |
-| Deep Research 3 controversies | 參、B | 完成 |
-| Deep Research 10 questions | 參、C | 完成 |
-| Architecture ①–⑧ | 肆、C–D＋圖 1 | 完成 |
-| Flowchart | 肆、J＋圖 3 | 完成 |
-| Numbered Pseudocode | 肆、K＋Algorithm 1–2 | 完成 |
-| References | 伍、[1]–[22] | 完成 |
-| 不虛構實驗結果 | 全文標示目標／驗收門檻 | 完成 |
 
 ---
 

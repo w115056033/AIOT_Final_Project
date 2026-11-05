@@ -784,7 +784,6 @@ def build():
     page_map = load_toc_map()
     # cover has no header/footer
     add_cover(doc)
-    add_info_page(doc)
     add_toc_page(doc, headings, page_map)
 
     # body starts on a new page via H1 page_break_before
